@@ -1,0 +1,13 @@
+{
+  "extends": "google",
+  "parser": "babel-eslint",
+  "rules": {
+    // Additional, per-project rules...
+  },
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true,
+      "modules": true
+    }
+  }
+}
