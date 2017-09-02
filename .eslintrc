@@ -2,7 +2,7 @@
   "extends": "google",
   "parser": "babel-eslint",
   "rules": {
-    // Additional, per-project rules...
+    "no-unused-vars": "off"
   },
   "parserOptions": {
     "ecmaFeatures": {
