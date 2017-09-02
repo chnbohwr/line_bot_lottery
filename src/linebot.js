@@ -5,14 +5,34 @@ const bot = linebot({
   channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN,
 });
 
-const getMessage = async (event) => {
+const MESSAGE = {
+  GET_URL: '取得活動網址',
+};
+
+const handleBotReplyError = (e) => {
+  console.error(`reply message error`, JSON.stringify(e));
+};
+
+const getUrlController = async (event) => {
   try {
-    await event.reply(event.message.text);
+    await event.reply('this is your url');
   } catch (e) {
-    console.error(`reply message error`, JSON.stringify(e));
+    handleBotReplyError(e);
+  }
+  return;
+};
+
+const messageController = (event) => {
+  const text = event.message.text;
+  console.log(JSON.stringify(event));
+  switch (text) {
+    case MESSAGE.GET_URL:
+      return getUrlController(event);
+    default:
+      break;
   }
 };
 
-bot.on('message', getMessage);
+bot.on('message', messageController);
 
 export default bot.parser();
