@@ -1,9 +1,5 @@
 import request from 'request-promise-native';
-import requestDebug from 'request-debug';
 import config from '../config/config';
-if (process.env.NODE_ENV !== 'production') {
-  requestDebug(request);
-}
 
 export const getAccessToken = async (code) => {
   const formData = {
