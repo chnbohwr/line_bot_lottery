@@ -1,5 +1,6 @@
 import linebot from 'linebot';
-const bot = linebot({
+import config from '../config/config';
+export const bot = linebot({
   channelId: process.env.CHANNEL_ID,
   channelSecret: process.env.CHANNEL_SECRET,
   channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN,
@@ -16,8 +17,8 @@ const handleBotReplyError = (e) => {
 const getUrlController = async (event) => {
   try {
     const shareUserId = event.source.userId;
-    const redirectUrl = `https://d4dd54ac.ngrok.io/lotteryEvent?shareUser=${shareUserId}`;
-    const url = `https://access.line.me/dialog/oauth/weblogin?response_type=code&client_id=${process.env.LOGIN_CHANNEL_ID}&redirect_uri=${redirectUrl}&state=${shareUserId}`;
+    const redirectUrl = config.redirectUrl;
+    const url = `${config.loginUrl}?response_type=code&client_id=${process.env.LOGIN_CHANNEL_ID}&redirect_uri=${redirectUrl}&state=${shareUserId}`;
     await event.reply(url);
   } catch (e) {
     handleBotReplyError(e);

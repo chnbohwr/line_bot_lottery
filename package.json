@@ -23,6 +23,9 @@
     "eslint-config-google": "^0.9.1",
     "express": "^4.15.4",
     "linebot": "^1.3.0",
-    "monk": "^6.0.3"
+    "monk": "^6.0.3",
+    "qs": "^6.5.0",
+    "request": "^2.81.0",
+    "request-promise-native": "^1.0.4"
   }
 }
