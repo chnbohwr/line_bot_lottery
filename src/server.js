@@ -1,15 +1,15 @@
 import express from 'express';
-import botMiddleware, { bot } from './linebot';
+import lineBot from './linebot';
 import { getAccessToken, getUserProfile } from './lineAuth';
 import config from '../config/config';
 
 import qs from 'qs';
 import monk from 'monk';
-const db = monk(process.env.db || 'localhost/meowdraw');
+const db = monk(process.env.db || 'localhost/line_test_lottery');
 const Share = db.get('share');
 const app = express();
 
-app.post('/line', botMiddleware);
+app.post('/line', lineBot.parser());
 
 app.get('/le', async (req, res) => {
   console.log(req.query);
@@ -26,7 +26,7 @@ app.get('/le', async (req, res) => {
         clickUserId,
         createAt: new Date(),
       });
-      bot.push(shareUserId, '有人看到你的分享了');
+      await lineBot.push(shareUserId, '有人看到你的分享了');
     }
     res.redirect(config.officialUrl);
   } catch (e) {

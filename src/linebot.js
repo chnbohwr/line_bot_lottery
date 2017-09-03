@@ -39,6 +39,6 @@ const messageController = (event) => {
 
 bot.on('message', messageController);
 
-export default bot.parser();
+export default bot;
 
 // {"type":"message","replyToken":"5fa1119da3a04f2dbfc5b610e3c4","source":{"userId":"U4510401b3d2b99c117dca0e306d","type":"user"},"timestamp":1504331479027,"message":{"type":"text","id":"6635924625955","text":"取得活動網址"}}

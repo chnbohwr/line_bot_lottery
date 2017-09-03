@@ -26,7 +26,7 @@ export const getUserProfile = async (accessToken) => {
   };
   try {
     const userData = await request.get(option);
-    return userData;
+    return JSON.parse(userData);
   } catch (e) {
     throw e;
   }

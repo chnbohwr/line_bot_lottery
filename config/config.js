@@ -3,5 +3,5 @@ export default {
   redirectUrl: 'https://d4dd54ac.ngrok.io/le/',
   accessTokenUrl: 'https://api.line.me/v2/oauth/accessToken',
   profileUrl: 'https://api.line.me/v2/profile',
-  officialUrl: 'https://www.meowdraw.com.tw/',
+  officialUrl: 'https://www.google.com',
 };
