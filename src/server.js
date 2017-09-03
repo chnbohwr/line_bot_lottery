@@ -1,28 +1,11 @@
 import express from 'express';
+import lineLoginMiddleware from './lineLogin';
 import lineBot from './linebot';
-import { getAccessToken, getUserProfile } from './lineAuth';
-import config from '../config/config';
-import { Share } from './db';
-
 const app = express();
-
+app.set('view engine', 'ejs');
+app.set('views', './views');
 app.post('/line', lineBot.parser());
-
-app.get('/le', async (req, res) => {
-  const code = req.query.code;
-  const shareUserId = req.query.state;
-  try {
-    const accessData = await getAccessToken(code);
-    const userData = await getUserProfile(accessData.access_token);
-    const clickUserId = userData.userId;
-    Share.update({ shareUserId, clickUserId }, { shareUserId, clickUserId, createAt: new Date() }, { upsert: true });
-    lineBot.push(shareUserId, '有人看到你的分享了');
-    res.redirect(config.officialUrl);
-  } catch (e) {
-    console.error(e);
-    res.send('error');
-  }
-});
-
-app.listen(3000);
-console.log('port 3000');
+app.get('/le', lineLoginMiddleware);
+app.get('/admin', (req, res) => res.render('admin/index'));
+app.listen(process.env.PORT || 3000);
+console.log(`server start success ${process.env.PORT ? '' : 'port: 3000'}`);
