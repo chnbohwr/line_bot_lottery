@@ -1,9 +1,15 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import { Admin } from './db';
+import { Admin, Ticket } from './db';
 const adminApiRouter = express.Router();
+const checkLogin = (req, res, next) => {
+  if (!req.session.admin) {
+    res.redirect('/admin/login');
+  } else {
+    next();
+  }
+};
 adminApiRouter.post('/login', bodyParser.urlencoded(), async (req, res) => {
-  console.log(JSON.stringify(req.body));
   const { username, password } = req.body;
   const userdata = await Admin.findOne({ username, password });
   if (userdata) {
@@ -14,10 +20,14 @@ adminApiRouter.post('/login', bodyParser.urlencoded(), async (req, res) => {
     res.redirect('/admin/login');
   }
 });
-adminApiRouter.post('/logout', (req, res) => {
+adminApiRouter.get('/logout', (req, res) => {
   req.session.admin = false;
   res.redirect('/admin/login');
 });
-
+adminApiRouter.post('/exchangeTicket', checkLogin, bodyParser.urlencoded(), async (req, res) => {
+  const ticketId = req.body.ticketId;
+  await Ticket.update({ ticketId }, { $set: { updateAt: new Date() } });
+  res.redirect('/admin');
+});
 
 export default adminApiRouter;

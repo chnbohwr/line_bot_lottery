@@ -25,8 +25,8 @@ const handleBotReplyError = (error, event) => {
 const askTicketController = async (event) => {
   try {
     const userId = event.source.userId;
-    const notShareCount = await Share.count({ shareUserId, used: null });
-    const shareCount = await Share.count({ shareUserId });
+    const notShareCount = await Share.count({ shareUserId: userId, used: null });
+    const shareCount = await Share.count({ shareUserId: userId });
     const usedTicketCount = await Ticket.count({ userId });
     const ticketCount = Math.round(notShareCount / config.shareChangeTicketCount);
     event.reply(`還剩下${ticketCount}次抽獎機會， 已經使用${usedTicketCount}次抽獎， 觀看連結人數: ${shareCount}`);

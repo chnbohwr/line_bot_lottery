@@ -3,39 +3,45 @@
 <%- include head.ejs %>
 
   <body>
+  <style>
+    .user>*{display: inline-block;}
+    .user img{ width: 40px; height: 40px; border-radius: 40px;}
+    .records:hover{background:#ddd;}
+  </style>
+
+  <form action="/api/admin/logout" method="get"><button type="submit" class="btn">登出</button></form>
     <div class="container">
         <table class="table">
           <tr>
             <th>序號</th>
             <th>中獎人</th>
-            <th>狀態</th>
             <th>抽獎時間</th>
             <th>兌換狀態</th>
           </tr>
 
           <% for (var i = 0; i < tickets.length; i++) { %>
-            <tr>
+            <tr class="records">
               <td>
                 <%= tickets[i].ticketId %>
               </td>
               <td>
-                <%= tickets[i].displayName %>
+                <div class="user">
+                  <img src="<%= tickets[i].pictureUrl %>" />
+                  <p><%= tickets[i].displayName %></p> 
+                </div>
+                
               </td>
               <td>
-                <% if (tickets[i].bingo) { %>
-                 <span class="badge badge-success">中獎</span>
-                <% } else { %>
-                 <span class="badge badge-secondary">沒中</span>
-                <% } %>
-              </td>
-              <td>
-                <%= tickets[i].createAt %>
+                <%= moment(tickets[i].createAt).format('YYYY-MM-DD HH:mm') %>
               </td>
               <td>
                 <% if (tickets[i].updateAt) { %>
-                 <span class="badge badge-secondary">換過了 <%= tickets[i].updateAt %></span>
+                  <span class="badge badge-secondary" title="<%= moment(tickets[i].updateAt).format('YYYY-MM-DD HH:mm') %>">已領取</span>
                 <% } else { %>
-                 <button type="button" class="btn btn-primary btn-sm">兌換</button>
+                  <form action="api/admin/exchangeTicket" method="post" onsubmit="return confirm('確定要領取嘛？');">
+                    <input type="hidden" name="ticketId" value="<%= tickets[i].ticketId %>" />
+                    <button type="submit" class="btn btn-primary btn-sm">兌換</button>
+                  </form>
                 <% } %>
               </td>
             </tr>
