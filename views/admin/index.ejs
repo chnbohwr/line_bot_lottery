@@ -4,11 +4,42 @@
 
   <body>
     <div class="container">
-        <%- JSON.stringify(tickets) %>
         <table class="table">
-          <thead>
-            
-          </thead>
+          <tr>
+            <th>序號</th>
+            <th>中獎人</th>
+            <th>狀態</th>
+            <th>抽獎時間</th>
+            <th>兌換狀態</th>
+          </tr>
+
+          <% for (var i = 0; i < tickets.length; i++) { %>
+            <tr>
+              <td>
+                <%= tickets[i].ticketId %>
+              </td>
+              <td>
+                <%= tickets[i].displayName %>
+              </td>
+              <td>
+                <% if (tickets[i].bingo) { %>
+                 <span class="badge badge-success">中獎</span>
+                <% } else { %>
+                 <span class="badge badge-secondary">沒中</span>
+                <% } %>
+              </td>
+              <td>
+                <%= tickets[i].createAt %>
+              </td>
+              <td>
+                <% if (tickets[i].updateAt) { %>
+                 <span class="badge badge-secondary">換過了 <%= tickets[i].updateAt %></span>
+                <% } else { %>
+                 <button type="button" class="btn btn-primary btn-sm">兌換</button>
+                <% } %>
+              </td>
+            </tr>
+            <% } %>
         </table>
     </div>
     <%- include script.ejs %>
