@@ -5,4 +5,5 @@ export default {
   profileUrl: 'https://api.line.me/v2/profile',
   officialUrl: 'https://www.google.com',
   shareChangeTicketCount: 5,
+  ticketProbability: 20, // 20%
 };

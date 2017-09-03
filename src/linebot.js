@@ -11,7 +11,8 @@ export const bot = linebot({
 const MESSAGE = {
   GET_URL: '取得活動網址',
   ASK_TICKET: '詢問抽獎次數',
-  GET_TICKET: '取得抽獎券',
+  GET_TICKET: '抽獎',
+  EVENT_INFO: '活動說明',
 };
 
 const handleBotReplyError = (error, event) => {
@@ -22,10 +23,39 @@ const handleBotReplyError = (error, event) => {
 const askTicketController = async (event) => {
   try {
     const shareUserId = event.source.userId;
-    const shareCount = await Share.count({ shareUserId, used: null });
+    const notShareCount = await Share.count({ shareUserId, used: null });
+    const shareCount = await Share.count({ shareUserId });
     const usedTicketCount = await Ticket.count({ shareUserId });
-    const ticketCount = Math.round(shareCount / config.shareChangeTicketCount);
+    const ticketCount = Math.round(notShareCount / config.shareChangeTicketCount);
     event.reply(`還剩下${ticketCount}次抽獎機會， 已經使用${usedTicketCount}次抽獎， 觀看連結人數: ${shareCount}`);
+  } catch (e) {
+    throw e;
+  }
+  return;
+};
+
+const getTicketController = async (event) => {
+  try {
+    const shareUserId = event.source.userId;
+    const shareCount = await Share.count({ shareUserId, used: null });
+    const ticketCount = Math.round(shareCount / config.shareChangeTicketCount);
+    if (ticketCount > 0) {
+      const ticket = {
+        shareUserId,
+        createAt: new Date(),
+        bingo: (Math.random() * 100) < config.ticketProbability,
+      };
+      const shares = await Share.find({ shareUserId, used: null }, { limit: config.shareChangeTicketCount });
+      shares.forEach((share) => Share.findOneAndUpdate({ _id: share._id }, { $set: { used: true } }));
+      const dbTicket = await Ticket.insert(ticket);
+      if (dbTicket.bingo) {
+        event.reply(`[恭喜中獎]序號是: ${dbTicket._id}`);
+      } else {
+        event.reply(`沒有中獎，請再接再勵`);
+      }
+    } else {
+      event.reply(`抽獎券不足，輸入：${MESSAGE.ASK_TICKET} 察看擁有的抽獎券`);
+    }
   } catch (e) {
     throw e;
   }
@@ -44,6 +74,10 @@ const getUrlController = async (event) => {
   return;
 };
 
+const eventInfoController = (event) =>{
+  event.reply('這是活動說明');
+};
+
 const messageController = (event) => {
   const text = event.message.text;
   try {
@@ -52,8 +86,11 @@ const messageController = (event) => {
         return getUrlController(event);
       case MESSAGE.ASK_TICKET:
         return askTicketController(event);
+      case MESSAGE.GET_TICKET:
+        return getTicketController(event);
+      case MESSAGE.EVENT_INFO:
       default:
-        break;
+        return eventInfoController(event);
     }
   } catch (e) {
     handleBotReplyError(e, evnet);
