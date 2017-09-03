@@ -1,11 +1,14 @@
 import express from 'express';
 import lineLoginMiddleware from './lineLogin';
 import lineBot from './linebot';
+import config from '../config/config';
+import adminViewRouter from './adminView';
 const app = express();
 app.set('view engine', 'ejs');
 app.set('views', './views');
 app.post('/line', lineBot.parser());
 app.get('/le', lineLoginMiddleware);
-app.get('/admin', (req, res) => res.render('admin/index'));
+app.use('/admin', adminViewRouter);
+app.all('*', (req, res) => res.redirect(config.officialUrl));
 app.listen(process.env.PORT || 3000);
 console.log(`server start success ${process.env.PORT ? '' : 'port: 3000'}`);

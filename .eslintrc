@@ -2,10 +2,11 @@
   "extends": "google",
   "parser": "babel-eslint",
   "rules": {
-    "no-unused-vars": "off",
-    "object-curly-spacing":"off",
-    "camelcase":"off",
-    "max-len":"off"
+    "no-unused-vars": "warn",
+    "object-curly-spacing": "off",
+    "camelcase": "off",
+    "max-len": "off",
+    "new-cap": "off"
   },
   "parserOptions": {
     "ecmaFeatures": {
