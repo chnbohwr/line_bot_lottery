@@ -24,10 +24,10 @@ const handleBotReplyError = (error, event) => {
 
 const askTicketController = async (event) => {
   try {
-    const shareUserId = event.source.userId;
+    const userId = event.source.userId;
     const notShareCount = await Share.count({ shareUserId, used: null });
     const shareCount = await Share.count({ shareUserId });
-    const usedTicketCount = await Ticket.count({ shareUserId });
+    const usedTicketCount = await Ticket.count({ userId });
     const ticketCount = Math.round(notShareCount / config.shareChangeTicketCount);
     event.reply(`還剩下${ticketCount}次抽獎機會， 已經使用${usedTicketCount}次抽獎， 觀看連結人數: ${shareCount}`);
   } catch (e) {
@@ -40,11 +40,12 @@ const getTicketController = async (event) => {
   try {
     const shareUserId = event.source.userId;
     const shareCount = await Share.count({ shareUserId, used: null });
+    const userProfile = await event.source.profile();
     const ticketCount = Math.round(shareCount / config.shareChangeTicketCount);
     if (ticketCount > 0) {
       const ticket = {
+        ...userProfile,
         ticketId: shortid.generate(),
-        shareUserId,
         createAt: new Date(),
         bingo: (Math.random() * 100) < config.ticketProbability,
       };
