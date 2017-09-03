@@ -11,7 +11,7 @@ export default async (req, res) => {
     const userData = await getUserProfile(accessData.access_token);
     const clickUserId = userData.userId;
     Share.update({ shareUserId, clickUserId }, { shareUserId, clickUserId, createAt: new Date() }, { upsert: true });
-    lineBot.push(shareUserId, '有人看到你的分享了');
+    // lineBot.push(shareUserId, '有人看到你的分享了');
     res.redirect(config.officialUrl);
   } catch (e) {
     console.error(e);
