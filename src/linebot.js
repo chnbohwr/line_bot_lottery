@@ -14,16 +14,22 @@ const MESSAGE = {
   GET_TICKET: '取得抽獎券',
 };
 
-const handleBotReplyError = (e) => {
-  console.error(`reply message error`, JSON.stringify(e));
+const handleBotReplyError = (error, event) => {
+  console.error(JSON.stringify(error), JSON.stringify(event));
+  reply(`出錯了糟糕，請截圖聯絡管理員 errorcode:${event.timestamp}+${event.source.userId}`);
 };
 
 const askTicketController = async (event) => {
-  const shareUserId = event.source.userId;
-  const shareCount = await Share.count({ shareUserId, used: null});
-  const ticketCount = Math.round(shareCount / config.shareChangeTicketCount);
-  const usedTicketCount = await Ticket.count({shareUserId});
-  event.reply(`還剩下${ticketCount}次抽獎機會， 已經使用${usedTicketCount}次抽獎， 觀看連結人數: ${shareCount}`);
+  try {
+    const shareUserId = event.source.userId;
+    const shareCount = await Share.count({ shareUserId, used: null });
+    const usedTicketCount = await Ticket.count({ shareUserId });
+    const ticketCount = Math.round(shareCount / config.shareChangeTicketCount);
+    event.reply(`還剩下${ticketCount}次抽獎機會， 已經使用${usedTicketCount}次抽獎， 觀看連結人數: ${shareCount}`);
+  } catch (e) {
+    throw e;
+  }
+  return;
 };
 
 const getUrlController = async (event) => {
@@ -33,20 +39,24 @@ const getUrlController = async (event) => {
     const url = `${config.loginUrl}?response_type=code&client_id=${process.env.LOGIN_CHANNEL_ID}&redirect_uri=${redirectUrl}&state=${shareUserId}`;
     await event.reply(url);
   } catch (e) {
-    handleBotReplyError(e);
+    throw e;
   }
   return;
 };
 
 const messageController = (event) => {
   const text = event.message.text;
-  switch (text) {
-    case MESSAGE.GET_URL:
-      return getUrlController(event);
-    case MESSAGE.ASK_TICKET:
-      return askTicketController(event);
-    default:
-      break;
+  try {
+    switch (text) {
+      case MESSAGE.GET_URL:
+        return getUrlController(event);
+      case MESSAGE.ASK_TICKET:
+        return askTicketController(event);
+      default:
+        break;
+    }
+  } catch (e) {
+    handleBotReplyError(e, evnet);
   }
 };
 
