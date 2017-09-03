@@ -9,7 +9,6 @@ const app = express();
 app.post('/line', lineBot.parser());
 
 app.get('/le', async (req, res) => {
-  console.log(req.query);
   const code = req.query.code;
   const shareUserId = req.query.state;
   try {

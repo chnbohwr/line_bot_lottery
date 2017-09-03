@@ -3,7 +3,7 @@ export default {
   redirectUrl: 'https://d4dd54ac.ngrok.io/le/',
   accessTokenUrl: 'https://api.line.me/v2/oauth/accessToken',
   profileUrl: 'https://api.line.me/v2/profile',
-  officialUrl: 'https://www.google.com',
-  shareChangeTicketCount: 5,
-  ticketProbability: 20, // 20%
+  officialUrl: 'https://www.meowdraw.com.tw/',
+  shareChangeTicketCount: 1,
+  ticketProbability: 80, // 20%
 };

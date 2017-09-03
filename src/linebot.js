@@ -1,6 +1,8 @@
 import linebot from 'linebot';
 import config from '../config/config';
+import shortid from 'shortid';
 import { Share, Ticket } from './db';
+import shortUrl from './shortUrl';
 
 export const bot = linebot({
   channelId: process.env.CHANNEL_ID,
@@ -41,6 +43,7 @@ const getTicketController = async (event) => {
     const ticketCount = Math.round(shareCount / config.shareChangeTicketCount);
     if (ticketCount > 0) {
       const ticket = {
+        ticketId: shortid.generate(),
         shareUserId,
         createAt: new Date(),
         bingo: (Math.random() * 100) < config.ticketProbability,
@@ -49,7 +52,7 @@ const getTicketController = async (event) => {
       shares.forEach((share) => Share.findOneAndUpdate({ _id: share._id }, { $set: { used: true } }));
       const dbTicket = await Ticket.insert(ticket);
       if (dbTicket.bingo) {
-        event.reply(`[恭喜中獎]序號是: ${dbTicket._id}`);
+        event.reply(`[恭喜中獎]序號是: ${dbTicket.ticketId}`);
       } else {
         event.reply(`沒有中獎，請再接再勵`);
       }
@@ -67,15 +70,21 @@ const getUrlController = async (event) => {
     const shareUserId = event.source.userId;
     const redirectUrl = config.redirectUrl;
     const url = `${config.loginUrl}?response_type=code&client_id=${process.env.LOGIN_CHANNEL_ID}&redirect_uri=${redirectUrl}&state=${shareUserId}`;
-    await event.reply(url);
+    const newUrl = await shortUrl(url);
+    await event.reply(newUrl);
   } catch (e) {
     throw e;
   }
   return;
 };
 
-const eventInfoController = (event) =>{
-  event.reply('這是活動說明');
+const eventInfoController = (event) => {
+  try {
+    event.reply(`這是活動說明 複製活動連結給朋友，每${config.shareChangeTicketCount}人看過就可以進行一次抽獎`);
+  } catch (e) {
+    throw e;
+  }
+  return;
 };
 
 const messageController = (event) => {
