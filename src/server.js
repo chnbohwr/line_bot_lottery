@@ -3,7 +3,7 @@ import session from 'express-session';
 import flash from 'express-flash';
 import lineLoginMiddleware from './lineLogin';
 import lineBot from './linebot';
-import config from '../config/config';
+import config from './config/config';
 import adminViewRouter from './adminView';
 import adminApiRouter from './adminApi';
 const app = express();

@@ -1,5 +1,5 @@
 import request from 'request-promise-native';
-import config from '../config/config';
+import config from './config/config';
 
 export const getAccessToken = async (code) => {
   const formData = {

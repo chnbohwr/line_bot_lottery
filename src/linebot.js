@@ -1,5 +1,5 @@
 import linebot from 'linebot';
-import config from '../config/config';
+import config from './config/config';
 import shortid from 'shortid';
 import { Share, Ticket } from './db';
 import shortUrl from './shortUrl';

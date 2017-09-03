@@ -4,8 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "babel-node src/server.js",
-    "build": "babel src --out-dir lib"
+    "start": "node lib/server.js",
+    "dev": "babel-node src/server.js",
+    "build": "babel src --out-dir lib",
+    "postinstall": "npm run build"
   },
   "author": "",
   "license": "ISC",

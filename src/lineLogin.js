@@ -1,7 +1,7 @@
 import { Share } from './db';
 import { getAccessToken, getUserProfile } from './lineAuth';
 import lineBot from './linebot';
-import config from '../config/config';
+import config from './config/config';
 
 export default async (req, res) => {
   const code = req.query.code;
