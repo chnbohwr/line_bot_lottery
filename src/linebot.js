@@ -49,7 +49,14 @@ const sendTicketController = async (event) => {
   shares.forEach((share) => Share.findOneAndUpdate({ _id: share._id }, { $set: { used: true } }));
   const dbTicket = await Ticket.insert(ticket);
   if (dbTicket.bingo) {
-    return (`[恭喜中獎]序號是: ${dbTicket.ticketId}`);
+    return (
+      `[恭喜中獎]序號是: ${dbTicket.ticketId}
+中獎後將序號發送到
+LINE:meowdraw
+這個帳號才能發送獎勵給你
+一組序號可兌換秒抽上貼圖*1
+兩組序號可兌換所有貼圖*1
+      `);
   } else {
     return (`沒有中獎，請再接再勵`);
   }
@@ -90,16 +97,11 @@ const eventInfoController = async (event) => {
   const url = `${config.loginUrl}?response_type=code&client_id=${process.env.LOGIN_CHANNEL_ID}&redirect_uri=${redirectUrl}&state=${shareUserId}`;
   const newUrl = await shortUrl(url);
   event.reply(`分享此篇文章 
-  被不同人點閱${config.shareChangeTicketCount}次
-  可以獲得一次抽獎次數
-  中獎後將序號發送到
-  LINE:meowdraw
-  這個帳號才能發送獎勵給你
-  一組序號可兌換秒抽上貼圖*1
-  兩組序號可兌換所有貼圖*1
-  抽獎次數無上限
-  到秒抽查看更多好康
-  活動網址: ${newUrl}`);
+被不同人點閱${config.shareChangeTicketCount}次
+可以獲得一次抽獎次數
+抽獎次數無上限
+到秒抽查看更多好康
+活動網址: ${newUrl}`);
 };
 
 const messageController = (event) => {
