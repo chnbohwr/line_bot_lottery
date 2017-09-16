@@ -9,7 +9,7 @@ import adminApiRouter from './adminApi';
 const app = express();
 app.set('view engine', 'ejs');
 app.set('views', './views');
-app.use(session({ secret: 'F@##$FASDFWERG$#%$%&%', cookie: { maxAge: 60000 }}));
+app.use(session({ secret: 'F@##$FASDFWERG$#%$%&%' }));
 app.use(flash());
 app.post('/line', lineBot.parser());
 app.get('/le', lineLoginMiddleware);
