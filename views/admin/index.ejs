@@ -7,10 +7,13 @@
     .user>*{display: inline-block;}
     .user img{ width: 40px; height: 40px; border-radius: 40px;}
     .records:hover{background:#ddd;}
+    .totalTicket{margin: 20px 0;}
   </style>
+
 
   <form action="/api/admin/logout" method="get"><button type="submit" class="btn">登出</button></form>
     <div class="container">
+    <div class="totalTicket">總共發出<%= tickets.length %>張序號了</div>
         <table class="table">
           <tr>
             <th>序號</th>
