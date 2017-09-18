@@ -100,7 +100,7 @@ const eventInfoController = async (event) => {
 被不同人點閱${config.shareChangeTicketCount}次
 可以獲得一次抽獎次數
 抽獎次數無上限
-到秒抽查看更多好康
+加入好友立即抽獎
 活動網址: ${newUrl}`);
 };
 
