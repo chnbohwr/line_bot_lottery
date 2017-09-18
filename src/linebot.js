@@ -101,7 +101,7 @@ const eventInfoController = async (event) => {
 可以獲得一次抽獎次數
 抽獎次數無上限
 加入好友立即抽獎
-活動網址: ${newUrl}`);
+${newUrl}`);
 };
 
 const messageController = (event) => {
