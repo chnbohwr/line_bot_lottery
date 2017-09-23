@@ -6,6 +6,10 @@ import config from './config/config';
 export default async (req, res) => {
   const code = req.query.code;
   const shareUserId = req.query.state;
+  if (!code) {
+    console.log('user disallow login');
+    return;
+  }
   try {
     const accessData = await getAccessToken(code);
     const userData = await getUserProfile(accessData.access_token);
