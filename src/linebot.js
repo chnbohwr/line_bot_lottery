@@ -72,7 +72,7 @@ const lotteryController = async (event) => {
   try {
     const shareCount = await Share.count({ shareUserId, used: null });
     const totalShareCount = await Share.count({ shareUserId });
-    const ticketCount = Math.round(shareCount / config.shareChangeTicketCount);
+    const ticketCount = Math.floor(shareCount / config.shareChangeTicketCount);
     const replyMessages = [];
     await notickController(event);
     if (ticketCount) {
