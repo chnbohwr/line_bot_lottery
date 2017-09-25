@@ -13,6 +13,15 @@
 
   <form action="/api/admin/logout" method="get"><button type="submit" class="btn">登出</button></form>
     <div class="container">
+    <div>
+     <h3>每日分享統計</h3>
+     <ul>
+     <% for (var j = 0; j < daily_report.length; j++) { %>
+      <li><%= daily_report[j]._id %> 分享次數：<%= daily_report[j].count %> </li>
+     <% } %>
+     </ul>
+    </div>
+    <h3 style="margin-top:20px;">中獎名單</h3>
     <div class="totalTicket">總共發出<%= tickets.length %>張序號了</div>
         <table class="table">
           <tr>
